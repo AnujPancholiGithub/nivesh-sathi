@@ -18,7 +18,7 @@ function App() {
     const [month, year] = startMonth.split('-');
     const startDate = new Date(year, month - 1);
 
-    for (let month = 1; month <= totalMonths; month++) {
+    for (let month = 0; month <= totalMonths; month++) {
       const currentDate = new Date(startDate.getFullYear(), startDate.getMonth() + month - 1);
       const interest = principal * monthlyRate;
       const principalStart = principal;
@@ -31,7 +31,7 @@ function App() {
 
       newResults.push({
         month,
-        date: currentDate.toLocaleString('default', { month: 'short' }) + '-' + currentDate.getFullYear(),
+        date: currentDate.toLocaleString('default', { month: 'short' }) + ' ' + currentDate.getFullYear(),
         principalStart,
         interest,
         investment: monthlyInvestment,
@@ -51,10 +51,10 @@ function App() {
   return (
     <div className="app">
       <div className="card">
-        <h1>Nivesh Sathi Calculato By Anuj Pancholi</h1>
+        <h1>समृद्धि साथी कैलक्यूलेटर अनुज पंचोली द्वारा</h1>
         <form onSubmit={calculateInvestment}>
           <div className="input-group">
-            <label htmlFor="monthlyInvestment">Monthly Investment (₹)</label>
+            <label htmlFor="monthlyInvestment">मासिक निवेश (₹)</label>
             <input 
               id="monthlyInvestment"
               type="number" 
@@ -62,10 +62,11 @@ function App() {
               onChange={(e) => setMonthlyInvestment(Number(e.target.value))} 
               required 
             />
+            <small className="info">हर महीने कितना निवेश कर सकते हैं, वह दर्ज करें।</small>
           </div>
 
           <div className="input-group">
-            <label htmlFor="annualRate">Annual Interest Rate (%)</label>
+            <label htmlFor="annualRate">वार्षिक ब्याज दर (%)</label>
             <input 
               id="annualRate"
               type="number" 
@@ -73,10 +74,11 @@ function App() {
               onChange={(e) => setAnnualRate(Number(e.target.value))} 
               required 
             />
+            <small className="info">आपके निवेश के लिए अपेक्षित वार्षिक ब्याज दर दर्ज करें।</small>
           </div>
 
           <div className="input-group">
-            <label htmlFor="totalMonths">Total Months</label>
+            <label htmlFor="totalMonths">निवेश अवधि (महीने)</label>
             <input 
               id="totalMonths"
               type="number" 
@@ -84,10 +86,11 @@ function App() {
               onChange={(e) => setTotalMonths(Number(e.target.value))} 
               required 
             />
+            <small className="info">आपकी निवेश अवधि को दर्ज करें (महीनों में)।</small>
           </div>
 
           <div className="input-group">
-            <label htmlFor="reinvestMonths">Reinvest Months</label>
+            <label htmlFor="reinvestMonths">पुनः निवेश अवधि (महीने)</label>
             <input 
               id="reinvestMonths"
               type="number" 
@@ -95,10 +98,11 @@ function App() {
               onChange={(e) => setReinvestMonths(Number(e.target.value))} 
               required 
             />
+            <small className="info">ब्याज कमाने के लिए कितने महीने पुनः निवेश करने की योजना है, वह दर्ज करें।</small>
           </div>
 
           <div className="input-group">
-            <label htmlFor="startMonth">Start Month (MM-YYYY)</label>
+            <label htmlFor="startMonth">शुरुआत महीना (मम-वर्ष)</label>
             <input 
               id="startMonth"
               type="text" 
@@ -107,29 +111,30 @@ function App() {
               pattern="\d{2}-\d{4}" 
               required 
             />
+            <small className="info">उदाहरण: 01-2023 (महीना-वर्ष)</small>
           </div>
 
-          <button type="submit">Calculate</button>
+          <button type="submit">गणना करें</button>
         </form>
       </div>
 
       {results.length > 0 && (
         <div className="results">
           <div className="card summary">
-            <h2>Summary</h2>
-            <p><strong>Total Investment:</strong><br />₹{summary.totalAmount.toFixed(2)}</p>
-            <p><strong>Interest (last 2 months):</strong><br />₹{summary.interestLastTwoMonths.toFixed(2)}</p>
-            <p><strong>Grand Total:</strong><br />₹{summary.grandTotal.toFixed(2)}</p>
+            <h2>सारांश</h2>
+            <p><strong>कुल निवेश:</strong><br />₹{summary.totalAmount.toFixed(2)}</p>
+            <p><strong>ब्याज कमाया (पिछले 2 महीने):</strong><br />₹{summary.interestLastTwoMonths.toFixed(2)}</p>
+            <p><strong>कुल राशि:</strong><br />₹{summary.grandTotal.toFixed(2)}</p>
           </div>
 
-          <h2>Monthly Breakdown</h2>
+          <h2>मासिक विवरण</h2>
           {results.map((row, index) => (
             <div key={index} className="card result-card">
-              <h3>{row.date} (Month {row.month})</h3>
-              <p><strong>Principal Start:</strong> ₹{row.principalStart.toFixed(2)}</p>
-              <p><strong>Interest:</strong> ₹{row.interest.toFixed(2)}</p>
-              <p><strong>Investment:</strong> ₹{row.investment.toFixed(2)}</p>
-              <p><strong>Principal End:</strong> ₹{row.principalEnd.toFixed(2)}</p>
+              <h3>{row.date} (महीना {row.month})</h3>
+              <p><strong>प्रारंभिक राशि:</strong> ₹{row.principalStart.toFixed(2)}</p>
+              <p><strong>ब्याज कमाया:</strong> ₹{row.interest.toFixed(2)}</p>
+              <p><strong>निवेश:</strong> ₹{row.investment.toFixed(2)}</p>
+              <p><strong>अंतिम राशि:</strong> ₹{row.principalEnd.toFixed(2)}</p>
             </div>
           ))}
         </div>

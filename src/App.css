@@ -1,3 +1,4 @@
+/* Reset and base styles */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -11,11 +12,13 @@ body {
   padding: 20px;
 }
 
+/* Container for the app */
 .app {
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
+/* Styling for cards */
 .card {
   background: #fff;
   border-radius: 10px;
@@ -24,6 +27,7 @@ body {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Heading styles */
 h1 {
   text-align: center;
   margin-bottom: 20px;
@@ -35,29 +39,31 @@ h2 {
   color: #444;
 }
 
+/* Form styles */
 form {
+  display: grid;
+  gap: 20px;
+}
+
+/* Input group styles */
+.input-group {
   display: flex;
   flex-direction: column;
 }
 
-.input-group {
-  margin-bottom: 15px;
-}
-
 label {
-  display: block;
   margin-bottom: 5px;
   color: #666;
 }
 
 input {
-  width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 16px;
 }
 
+/* Button styles */
 button {
   background-color: #007bff;
   color: #fff;
@@ -73,12 +79,16 @@ button:hover {
   background-color: #0056b3;
 }
 
+/* Results section styles */
 .results {
   margin-top: 30px;
 }
 
+/* Summary card styles */
 .summary {
   background-color: #e9ecef;
+  padding: 20px;
+  border-radius: 10px;
   margin-bottom: 30px;
 }
 
@@ -86,7 +96,12 @@ button:hover {
   margin-bottom: 10px;
 }
 
+/* Individual result card styles */
 .result-card {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin-bottom: 15px;
 }
 
@@ -99,15 +114,10 @@ button:hover {
   margin-bottom: 5px;
 }
 
+/* Responsive design for tablets and larger screens */
 @media (min-width: 768px) {
-  .app {
-    max-width: 800px;
-  }
-
   form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   button {
