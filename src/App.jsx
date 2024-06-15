@@ -6,7 +6,7 @@ function App() {
   const [monthlyInvestment, setMonthlyInvestment] = useState(24000); // Monthly investment amount
   const [annualRate, setAnnualRate] = useState(24); // Annual interest rate
   const [totalMonths, setTotalMonths] = useState(24); // Total investment duration in months
-  const [reinvestMonths, setReinvestMonths] = useState(22); // Duration to reinvest interest
+  const [reinvestMonths, setReinvestMonths] = useState(24); // Duration to reinvest interest
   const [startMonth, setStartMonth] = useState('6/2022'); // Start month of investment
   const [endMonth, setEndMonth] = useState(''); // End month of investment
   const [results, setResults] = useState([]); // Array to store monthly investment results
@@ -67,6 +67,9 @@ function App() {
   const formatIndianCurrency = (amount) => {
     return amount.toLocaleString('en-IN', { maximumFractionDigits: 0 });
   };
+
+  // Calculate amount per person
+  const amountPerPerson  = (summary.totalAmount + 1000 )/ 48;
 
   return (
     <div className="app">
@@ -151,10 +154,11 @@ function App() {
           {/* Summary section */}
           <div className="summary card">
             <h2>सारांश {results?.length + ' महीने का'} </h2>
-            <p><strong>अंतिम राशि निवेश की ब्याज सहित:</strong> ₹{formatIndianCurrency(summary.totalAmount)}</p>
+            <p><strong>अंतिम राशि निवेश की ब्याज सहित:</strong> ₹{` ${formatIndianCurrency(summary.totalAmount)} + 1000 Penalty = ${ formatIndianCurrency(summary.totalAmount+1000) }`}</p>
             <p><strong>मूलधन:</strong> ₹{formatIndianCurrency(summary.principalInvested)}</p>
             <p><strong>कुल ब्याज:</strong> ₹{formatIndianCurrency(summary.totalInterest)}</p>
             <p><strong>निवेश का अंतिम महीना:</strong> {endMonth}</p>
+            <p><strong>प्रति व्यक्ति राशि (48 लोगों में बंटवारा):</strong> ₹{formatIndianCurrency(amountPerPerson)}</p>
           </div>
 
           {/* Monthly details section */}
@@ -166,10 +170,9 @@ function App() {
               <p><strong>इस महीने के ब्याज कमाया:</strong> <span className="amount">₹{formatIndianCurrency(row.interestEarned)}</span></p>
               <p><strong>कुल ब्याज कमाया अब तक:</strong> <span className="amount">₹{formatIndianCurrency(row.totalInterest)}</span></p>
               <p><strong>हर महीने निवेश:</strong> <span className="amount">₹{formatIndianCurrency(row.investment)}</span></p>
-              <p><strong>अंतिम कुल राशि इस महीने तक की:</strong> <span className="amount">₹{formatIndianCurrency(row.finalPrincipal)}</span></p>
+              <p><strong>अंतिम कुल राशि इस महीने तक की:</strong> <span className="amount">₹{ ` ${formatIndianCurrency(row.initialPrincipal)} + ${formatIndianCurrency(row.interestEarned)} + ${formatIndianCurrency(row.investment)}  = ${formatIndianCurrency(row.finalPrincipal)}` }</span></p>
             </div>
           ))}
-
         </div>
       )}
     </div>
