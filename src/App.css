@@ -20,7 +20,7 @@ body {
 
 /* Styling for cards */
 .card {
-  background: #fff;
+  background: #ffffff;
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
@@ -28,15 +28,18 @@ body {
 }
 
 /* Heading styles */
-h1 {
+h1, h2 {
   text-align: center;
+  color: #333333;
+}
+
+h1 {
   margin-bottom: 20px;
-  color: #333;
 }
 
 h2 {
   margin-bottom: 15px;
-  color: #444;
+  color: #444444;
 }
 
 /* Form styles */
@@ -53,12 +56,12 @@ form {
 
 label {
   margin-bottom: 5px;
-  color: #666;
+  color: #666666;
 }
 
-input {
-  padding: 10px;
-  border: 1px solid #ddd;
+input, button {
+  padding: 12px;
+  border: 1px solid #dddddd;
   border-radius: 5px;
   font-size: 16px;
 }
@@ -66,7 +69,7 @@ input {
 /* Button styles */
 button {
   background-color: #007bff;
-  color: #fff;
+  color: #ffffff;
   border: none;
   padding: 12px;
   border-radius: 5px;
@@ -94,11 +97,12 @@ button:hover {
 
 .summary p {
   margin-bottom: 10px;
+  color: #333333;
 }
 
 /* Individual result card styles */
 .result-card {
-  background-color: #fff;
+  background-color: #ffffff;
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -112,6 +116,7 @@ button:hover {
 
 .result-card p {
   margin-bottom: 5px;
+  color: #666666;
 }
 
 /* Responsive design for tablets and larger screens */
