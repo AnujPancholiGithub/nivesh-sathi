@@ -1,47 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
-  // State variables for user inputs and results
-  const [monthlyInvestment, setMonthlyInvestment] = useState(24000); // Monthly investment amount
-  const [annualRate, setAnnualRate] = useState(24); // Annual interest rate
-  const [totalMonths, setTotalMonths] = useState(24); // Total investment duration in months
-  const [reinvestMonths, setReinvestMonths] = useState(24); // Duration to reinvest interest
-  const [startMonth, setStartMonth] = useState('6/2022'); // Start month of investment
-  const [endMonth, setEndMonth] = useState(''); // End month of investment
-  const [results, setResults] = useState([]); // Array to store monthly investment results
-  const [summary, setSummary] = useState({ totalAmount: 0, principalInvested: 0, totalInterest: 0 }); // Summary of investment details
+  const [monthlyInvestment, setMonthlyInvestment] = useState(24000);
+  const [annualRate, setAnnualRate] = useState(24);
+  const [totalMonths, setTotalMonths] = useState(24);
+  const [reinvestMonths, setReinvestMonths] = useState(24);
+  const [startMonth, setStartMonth] = useState('6/2022');
+  const [penalty, setPenalty] = useState(1000); // Penalty amount
+  const [endMonth, setEndMonth] = useState('');
+  const [results, setResults] = useState([]);
+  const [summary, setSummary] = useState({ totalAmount: 0, principalInvested: 0, totalInterest: 0, penalty: 0 });
 
-  // Function to calculate investment details
+  useEffect(() => {
+    calculateInvestment();
+  }, []);
+
   const calculateInvestment = (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     const newResults = [];
     let principal = 0;
     let totalInterest = 0;
     let principalInvested = 0;
-    const monthlyInterestRate = annualRate / 100 / 12; // Monthly interest rate calculation
+    const monthlyInterestRate = annualRate / 100 / 12;
     const [startMonthNum, startYear] = startMonth.split('/');
     const startDate = new Date(startYear, parseInt(startMonthNum, 10) - 1);
 
-    // Loop through each month of the investment duration
     for (let monthIndex = 1; monthIndex <= totalMonths; monthIndex++) {
       const currentDate = new Date(startDate.getFullYear(), startDate.getMonth() + monthIndex - 1);
-      let interestEarned = principal * monthlyInterestRate; // Interest earned in the current month
+      let interestEarned = principal * monthlyInterestRate;
       const initialPrincipal = principal;
 
-      // Check if the current month is within the reinvestment period
       if (monthIndex <= reinvestMonths) {
-        principal += monthlyInvestment + interestEarned; // Add monthly investment and interest earned
+        principal += monthlyInvestment + interestEarned;
       } else {
-        principal += monthlyInvestment; // Add only the monthly investment
-        interestEarned = 0; // No interest earned beyond reinvestment period
+        principal += monthlyInvestment;
+        interestEarned = 0;
       }
 
-      // Accumulate total interest and principal invested
       totalInterest += interestEarned;
       principalInvested += monthlyInvestment;
 
-      // Store monthly investment details in the results array
       newResults.push({
         month: monthIndex,
         date: `${currentDate.toLocaleString('default', { month: 'short' })} ${currentDate.getFullYear()} (${monthIndex}) महीना का`,
@@ -52,31 +51,26 @@ function App() {
         finalPrincipal: principal
       });
 
-      // Set the end month when the loop completes
       if (monthIndex === totalMonths) {
         setEndMonth(`${currentDate.toLocaleString('default', { month: 'short' })} ${currentDate.getFullYear()} (${monthIndex}) महीना`);
       }
     }
 
-    // Update state with calculation results
     setResults(newResults);
-    setSummary({ totalAmount: principal, principalInvested, totalInterest });
+    setSummary({ totalAmount: principal, principalInvested, totalInterest, penalty });
   };
 
-  // Function to format amounts into Indian currency format
   const formatIndianCurrency = (amount) => {
     return amount.toLocaleString('en-IN', { maximumFractionDigits: 0 });
   };
 
-  // Calculate amount per person
-  const amountPerPerson  = (summary.totalAmount + 1000 )/ 48;
+  const amountPerPerson = (summary.totalAmount + summary.penalty) / 48;
 
   return (
     <div className="app">
-      <h1>समृद्धि साथी कैलक्यूलेटर By Anuj</h1>
+      <h1>समृद्धि साथी कैलक्यूलेटर</h1>
       <div className="card">
         <form onSubmit={calculateInvestment}>
-          {/* Monthly investment input */}
           <div className="input-group">
             <label htmlFor="monthlyInvestment">मासिक निवेश (₹)</label>
             <input
@@ -89,7 +83,6 @@ function App() {
             <small className="info">प्रति महीने निवेश की राशि</small>
           </div>
 
-          {/* Annual interest rate input */}
           <div className="input-group">
             <label htmlFor="annualRate">वार्षिक ब्याज दर (%)</label>
             <input
@@ -102,7 +95,6 @@ function App() {
             <small className="info">सालाना ब्याज दर</small>
           </div>
 
-          {/* Total investment duration input */}
           <div className="input-group">
             <label htmlFor="totalMonths">निवेश अवधि (महीने)</label>
             <input
@@ -115,7 +107,6 @@ function App() {
             <small className="info">निवेश की कितने महीनों तक योजना है</small>
           </div>
 
-          {/* Reinvestment period input */}
           <div className="input-group">
             <label htmlFor="reinvestMonths">ब्याज पुनर्निवेश अवधि (महीने)</label>
             <input
@@ -129,7 +120,6 @@ function App() {
             <small className="info">ब्याज कमाने के लिए निवेश की कितने महीनों तक योजना है</small>
           </div>
 
-          {/* Start month input */}
           <div className="input-group">
             <label htmlFor="startMonth">शुरुआती महीना (म/व)</label>
             <input
@@ -143,25 +133,34 @@ function App() {
             <small className="info">उदाहरण: 1/2023 (महीना/वर्ष)</small>
           </div>
 
-          {/* Submit button */}
+          <div className="input-group">
+            <label htmlFor="penalty">Penalty (₹)</label>
+            <input
+              id="penalty"
+              type="number"
+              value={penalty}
+              onChange={(e) => setPenalty(Number(e.target.value))}
+              required
+            />
+            <small className="info">Penalty amount in case of default</small>
+          </div>
+
           <button type="submit">गणना करें</button>
         </form>
       </div>
 
-      {/* Display results if available */}
       {results.length > 0 && (
         <div className="results">
-          {/* Summary section */}
           <div className="summary card">
-            <h2>सारांश {results?.length + ' महीने का'} </h2>
-            <p><strong>अंतिम राशि निवेश की ब्याज सहित:</strong> ₹{` ${formatIndianCurrency(summary.totalAmount)} + 1000 Penalty = ${ formatIndianCurrency(summary.totalAmount+1000) }`}</p>
-            <p><strong>मूलधन:</strong> ₹{formatIndianCurrency(summary.principalInvested)}</p>
-            <p><strong>कुल ब्याज:</strong> ₹{formatIndianCurrency(summary.totalInterest)}</p>
-            <p><strong>निवेश का अंतिम महीना:</strong> {endMonth}</p>
-            <p><strong>प्रति व्यक्ति राशि (48 लोगों में बंटवारा):</strong> ₹{formatIndianCurrency(amountPerPerson)}</p>
+            <h2>सारांश {results.length + ' महीने का'} </h2>
+            <p><strong>मूलधन:</strong> <span className="number">₹{formatIndianCurrency(summary.principalInvested)}</span></p>
+            <p><strong>कुल ब्याज:</strong> <span className="number">₹{formatIndianCurrency(summary.totalInterest)}</span></p>
+            <p><strong>पेनल्टी:</strong> <span className="number">₹{formatIndianCurrency(summary.penalty)}</span></p>
+            <p><strong>निवेश का अंतिम महीना:</strong> <span className="number">{endMonth}</span></p>
+            <p><strong>अंतिम राशि निवेश की ब्याज सहित:</strong> <span className="number">₹{formatIndianCurrency(summary.totalAmount)}</span> + <span className="number">₹{formatIndianCurrency(summary.penalty)}</span> Penalty = <span className="number">₹{formatIndianCurrency(summary.totalAmount + summary.penalty)}</span></p>
+            <p><strong>प्रति व्यक्ति राशि (48 लोगों में बंटवारा):</strong> <span className="number">₹{formatIndianCurrency(amountPerPerson)}</span></p>
           </div>
 
-          {/* Monthly details section */}
           <h2>मासिक विवरण</h2>
           {results.map((row, index) => (
             <div key={index} className={`result-card ${index % 2 === 0 ? 'even' : 'odd'}`}>
@@ -170,7 +169,7 @@ function App() {
               <p><strong>इस महीने के ब्याज कमाया:</strong> <span className="amount">₹{formatIndianCurrency(row.interestEarned)}</span></p>
               <p><strong>कुल ब्याज कमाया अब तक:</strong> <span className="amount">₹{formatIndianCurrency(row.totalInterest)}</span></p>
               <p><strong>हर महीने निवेश:</strong> <span className="amount">₹{formatIndianCurrency(row.investment)}</span></p>
-              <p><strong>अंतिम कुल राशि इस महीने तक की:</strong> <span className="amount">₹{ ` ${formatIndianCurrency(row.initialPrincipal)} + ${formatIndianCurrency(row.interestEarned)} + ${formatIndianCurrency(row.investment)}  = ${formatIndianCurrency(row.finalPrincipal)}` }</span></p>
+              <p><strong>अंतिम कुल राशि इस महीने तक की:</strong> <span className="amount">₹{formatIndianCurrency(row.finalPrincipal)}</span></p>
             </div>
           ))}
         </div>
