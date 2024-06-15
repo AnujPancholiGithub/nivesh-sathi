@@ -1,31 +1,47 @@
-// vite.config.js
 import { defineConfig } from 'vite';
-import reactRefresh from '@vitejs/plugin-react-refresh';
+import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   plugins: [
-    reactRefresh(),
+    react(),
     VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png', 'icons/*'], // Add your specific assets here
       manifest: {
-        name: 'Your App Name',
-        short_name: 'App Name',
-        theme_color: '#007bff', // Your preferred theme color
+        name: 'NiveshSathi',
+        short_name: 'NiveshSathi',
+        description: 'Your description here',
+        start_url: '/',
+        display: 'standalone',
+        background_color: '#ffffff',
+        theme_color: '#ffffff',
         icons: [
           {
-            src: '/icons/icon-192x192.png', // Path to your 192x192 icon
+            src: '/icon.png',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: '/icons/icon-512x512.png', // Path to your 512x512 icon
+            src: '/icon.png',
             sizes: '512x512',
             type: 'image/png',
           },
         ],
       },
+      workbox: {
+        runtimeCaching: [
+          {
+            urlPattern: new RegExp('^https://api.example.com/'),
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'api-cache',
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
+              },
+            },
+          },
+        ],
+      },      
     }),
   ],
 });
