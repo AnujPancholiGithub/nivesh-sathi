@@ -7,7 +7,7 @@ function App() {
   const [annualRate, setAnnualRate] = useState(24); // Annual interest rate
   const [totalMonths, setTotalMonths] = useState(24); // Total investment duration in months
   const [reinvestMonths, setReinvestMonths] = useState(22); // Duration to reinvest interest
-  const [startMonth, setStartMonth] = useState('1/2023'); // Start month of investment
+  const [startMonth, setStartMonth] = useState('6/2022'); // Start month of investment
   const [endMonth, setEndMonth] = useState(''); // End month of investment
   const [results, setResults] = useState([]); // Array to store monthly investment results
   const [summary, setSummary] = useState({ totalAmount: 0, principalInvested: 0, totalInterest: 0 }); // Summary of investment details
