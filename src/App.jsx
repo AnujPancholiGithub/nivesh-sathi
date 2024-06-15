@@ -70,7 +70,7 @@ function App() {
 
   return (
     <div className="app">
-      <h1>समृद्धि साथी कैलक्यूलेटर</h1>
+      <h1>समृद्धि साथी कैलक्यूलेटर By Anuj</h1>
       <div className="card">
         <form onSubmit={calculateInvestment}>
           {/* Monthly investment input */}
